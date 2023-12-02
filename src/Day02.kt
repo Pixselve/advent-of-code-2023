@@ -18,13 +18,10 @@ class Hand(toParse: String) {
         }
     }
 
-    override fun toString(): String {
-        return "Hand(red=$red, green=$green, blue=$blue)"
-    }
+    override fun toString() = "Hand(red=$red, green=$green, blue=$blue)"
 
-    fun isPossible(red: Int, green: Int, blue: Int): Boolean {
-        return red >= this.red && blue >= this.blue && green >= this.green
-    }
+    fun isPossible(red: Int, green: Int, blue: Int) =
+        red >= this.red && blue >= this.blue && green >= this.green
 
 
 }
@@ -33,51 +30,32 @@ class Game(toParse: String) {
     var hands: List<Hand>
     init {
         val split = toParse.split(": ")
-        hands = split.last().split("; ").map { el -> Hand(el) }
+        hands = split.last().split("; ").map { Hand(it) }
         id = split.first().split(" ").last().toInt()
     }
-
-    override fun toString(): String {
-        return "Game(id=$id, hand=$hands)"
-    }
-
-    fun isPossible(red: Int, green: Int, blue: Int): Boolean {
-        return this.hands.none { hand -> !hand.isPossible(red, green, blue) }
-    }
-
-    fun getMaxRed(): Int {
-        return hands.maxOf { hand -> hand.red }
-    }
-    fun getMaxGreen(): Int {
-        return hands.maxOf { hand -> hand.green }
-    }
-    fun getMaxBlue(): Int {
-        return hands.maxOf { hand -> hand.blue }
-    }
-
-    fun power(): Int {
-        return getMaxRed() * getMaxBlue() * getMaxGreen()
-    }
+    override fun toString(): String = "Game(id=$id, hand=$hands)"
+    fun isPossible(red: Int, green: Int, blue: Int) = this.hands.all { it.isPossible(red, green, blue) }
+    private fun getMaxRed() = hands.maxOf { it.red }
+    private fun getMaxGreen() = hands.maxOf { it.green }
+    private fun getMaxBlue() = hands.maxOf { it.blue }
+    fun power() = getMaxRed() * getMaxBlue() * getMaxGreen()
 }
 
 fun main() {
-    fun part1(input: List<String>): Int {
-        val maxRed = 12
-        val maxGreen = 13
-        val maxBlue = 14
-        return input
-            .map { line -> Game(line) }
-            .filter { game -> game.isPossible(maxRed, maxGreen, maxBlue) }
-            .map { game -> game.id }
-            .reduce { acc, i -> acc + i }
-    }
+    val maxRed = 12
+    val maxGreen = 13
+    val maxBlue = 14
 
-    fun part2(input: List<String>): Int {
-        return input
-            .map { line -> Game(line) }
-            .map { game -> game.power() }
-            .reduce { acc, i -> acc + i }
-    }
+    fun part1(input: List<String>) =
+        input
+        .map { Game(it) }
+        .filter { it.isPossible(maxRed, maxGreen, maxBlue) }
+        .sumOf { it.id }
+
+    fun part2(input: List<String>) =
+        input
+        .map { Game(it) }
+        .sumOf { it.power() }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day02_test")
@@ -86,5 +64,4 @@ fun main() {
     val input = readInput("Day02")
     part1(input).println()
     part2(input).println()
-
 }
