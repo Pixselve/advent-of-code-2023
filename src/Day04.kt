@@ -29,8 +29,8 @@ fun main() {
         var i = 0;
         while (i < ids.size) {
             val id = ids[i]
-            for (i1 in 1..matchingNumbers[id]) {
-                ids.add(id + i1)
+            repeat(matchingNumbers[id]) {
+                ids.add(id + it + 1)
             }
             i++
         }
