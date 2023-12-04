@@ -24,15 +24,12 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        val games = input.map { parseCard(it) }
-        val ids = (games.indices).toMutableList()
-
+        val matchingNumbers = input.map { parseCard(it) }.map { it.matchingNumbers() }
+        val ids = (matchingNumbers.indices).toMutableList()
         var i = 0;
         while (i < ids.size) {
             val id = ids[i]
-            val game = games[id]
-            val matchingNumber = game.matchingNumbers()
-            for (i1 in 1..matchingNumber) {
+            for (i1 in 1..matchingNumbers[id]) {
                 ids.add(id + i1)
             }
             i++
