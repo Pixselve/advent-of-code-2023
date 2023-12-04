@@ -26,7 +26,7 @@ fun main() {
     fun part2(input: List<String>): Int {
         val matchingNumbers = input.map { parseCard(it) }.map { it.matchingNumbers() }
         val ids = (matchingNumbers.indices).toMutableList()
-        var i = 0;
+        var i = 0
         while (i < ids.size) {
             val id = ids[i]
             repeat(matchingNumbers[id]) {
